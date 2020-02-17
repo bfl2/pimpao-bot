@@ -1,18 +1,18 @@
-const express = require('express');
-const fs = require('fs');
-var app = express();
 var path = require('path');
+const fs = require('fs');
+const express = require('express');
+var app = express();
 
 module.exports = { mountServer: function () {
 	var app = express();
 	app.listen(8080,  function() {
 		console.log('app listening on port 8080!');
 	});
-	app.get('/', function(req, res) {
+	app.get('/quiz', function(req, res) {
 		fs.writeFileSync(__dirname+"/index.html", buildHtml())
 		res.sendFile(__dirname+"/index.html");
 	});
-	app.get('/css', (req, res) => {
+	app.get('/quiz/css', (req, res) => {
 		res.sendFile(__dirname+"/style.css");
 	});
 
@@ -23,7 +23,7 @@ function buildHtml(req) {
 	var header = `
 	<!DOCTYPE html>
 	<head> <meta http-equiv="Refresh" content="5">
-	<link rel="stylesheet" href="http://localhost:8080/css">
+	<link rel="stylesheet" href="http://localhost:8080/quiz/css">
 	</head>
 	`
 	var content = new Date().toUTCString();
