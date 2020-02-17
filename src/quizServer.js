@@ -1,25 +1,37 @@
-var http = require('http');
+const express = require('express');
+const fs = require('fs');
+var app = express();
+var path = require('path');
 
-var server = http.createServer(function (req, res) {
-  var html = buildHtml(req);
+module.exports = { mountServer: function () {
+	var app = express();
+	app.listen(8080,  function() {
+		console.log('app listening on port 8080!');
+	});
+	app.get('/', function(req, res) {
+		fs.writeFileSync(__dirname+"/index.html", buildHtml())
+		res.sendFile(__dirname+"/index.html");
+	});
+	app.get('/css', (req, res) => {
+		res.sendFile(__dirname+"/style.css");
+	});
 
-  res.writeHead(200, {
-    'Content-Type': 'text/html',
-    'Content-Length': html.length,
-    'Expires': new Date().toUTCString()
-  });
-  res.end(html);
-}).listen(8080);
+	}
+}
 
 function buildHtml(req) {
-  var header = '';
-  var body = '';
+	var header = `
+	<!DOCTYPE html>
+	<head> <meta http-equiv="Refresh" content="5">
+	<link rel="stylesheet" href="http://localhost:8080/css">
+	</head>
+	`
+	var content = new Date().toUTCString();
+	var body = '<br><br> <body>' + content + '</body>'
 
-  // concatenate header string
-  // concatenate body string
+	var html = '<html>' + header + body + '</html>';
+	// concatenate header string
+	// concatenate body string
 
-  return '<!DOCTYPE html>'
-       + '<html><head>' + header + '</head> <br><br> <body>' + body + '</body></html>';
-};
-
-module.exports = server
+	return html
+	};

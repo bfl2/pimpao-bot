@@ -1,7 +1,9 @@
 import client from "./client";
-import quizServer from "./quizServer"
 import { resolve } from "./commandResolver";
 client.connect();
+import quizServer from "./quizServer";
+
+quizServer.mountServer()
 
 // Commands
 client.on("chat", (channel, user, message, self) => {
@@ -13,4 +15,3 @@ client.on("chat", (channel, user, message, self) => {
   }
 });
 
-quizServer
