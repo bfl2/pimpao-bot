@@ -1,12 +1,11 @@
-import { call } from "./router";
 
-let commandResolver = (channel, user, message) => {
+function commandResolver(channel, user, message) {
   const command = recognizeCommand(message);
 
   if (!command) return;
 
-  call(command, { channel, user, message });
-};
+  return command;
+}
 
 let recognizeCommand = message => {
   const lowerCaseMessage = message.toLowerCase();
@@ -28,8 +27,6 @@ let recognizeCommand = message => {
   return false;
 };
 
-module.exports = {
-  resolve: (channel, user, message) => {
-    commandResolver(channel, user, message);
-  }
+export default (channel, user, message) => {
+  return commandResolver(channel, user, message);
 };
