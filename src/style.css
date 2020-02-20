@@ -1,9 +1,46 @@
 body {
-	background-color: powderblue;
-  }
-  h1 {
-	color: blue;
-  }
-  p {
-	color: red;
-  }
+	font-family: sans-serif;
+	text-align: center;
+	padding: 3rem;
+	font-size: 18px;
+}
+
+.outer-container{
+	border-radius: 25px;
+	max-height: 800px;
+	width: 100%;
+	background-color: white;
+	align-content: center;
+}
+
+.inner-container-top{
+	border-radius: 25px;
+	float: top;
+	height: 100px;
+	width: 40%;
+	max-width: 60%;
+	margin-left: 15%;
+	padding: 5%;
+	background-color: grey;
+	color: white;
+	align-content: center;
+}
+.left{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
+.inner-container-bottom{
+	border-radius: 10px;
+	float: top;
+	height: 80px;
+	width: 15%;
+	margin-left: 30%;
+	padding: 3%;
+	background-color: green;
+	color: white;
+	align-content: center;
+}
