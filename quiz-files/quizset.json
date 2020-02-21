@@ -1,0 +1,74 @@
+{"set":
+	[
+		{
+			"question":"Qual a estrela mais brilhante do céu noturno",
+			"answer":"sirius",
+			"type":"text",
+			"category":"science",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Qual o heroi com mais partidas do ursope possui mais partidas",
+			"answer":"visage",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Que jogador adquiriu fama por ganhar o mid jogando no mato",
+			"answer":"mandy",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Qual a data de publicação do hit 'Rap do Bebet' (dd/mm/aaaa)",
+			"answer":"28/01/2019",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Dado que um objeto é solto de uma altura de 28.8m e considerando que g = 10 m/s2, a que velocidade(m/s) este atinge o solo",
+			"answer":"24",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Em que ano foi lançado o heroi visage no dota 2",
+			"answer":"2012",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Quantos pontos de HP cada ponto em Strength provém?",
+			"answer":"20",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"No anime Legend of The Galactic Heroes, qual o nome da fortaleza que é ponto central na história",
+			"answer":"iserlohn",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Qual o heroi assinatura do Dark Fofao",
+			"answer":"silencer",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		},
+		{
+			"question":"Qual o personagem famoso presente na bandeira do time Vou Butar!",
+			"answer":"mario",
+			"type":"text",
+			"category":"",
+			"difficulty":"medium"
+		}
+	]
+}

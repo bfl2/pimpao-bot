@@ -8,6 +8,7 @@ import Quiz from './quiz.js'
 var currentQuiz = undefined
 var status = 'inProgress'
 var lastUserToAnswer = undefined
+var quizList = undefined
 module.exports = {
 
 	mountServer: function () {
@@ -22,6 +23,7 @@ module.exports = {
 		app.get('/quiz/css', (req, res) => {
 			res.sendFile(__dirname+"/style.css");
 		});
+		loadQuizFiles()
 	},
 	getStatus: function() {
 		return status
@@ -29,8 +31,15 @@ module.exports = {
 	setQuiz: function(quiz) {
 		status = 'inProgress';
 		currentQuiz = quiz
-		console.log("quiz set" + quiz)
 	},
+	setRandomQuiz: function(){
+		status = 'inProgress';
+		//var randomIndex = Math.floor(Math.random() * this.length);
+		//currentQuiz = quizList[randomIndex];
+		//quizList.splice(randomIndex, 1);
+		currentQuiz = quizList.pop()//
+	},
+
 	checkAnswer: function(answer, username) {
 		lastUserToAnswer = username
 		if(currentQuiz != undefined) {
@@ -47,25 +56,35 @@ module.exports = {
 	}
 }
 
+function loadQuizFiles() {
+	var rawJson = fs.readFileSync(path.resolve(__dirname, "../quiz-files/quizset.json")).toString();
+	var parsedJson = JSON.parse(rawJson)
+	quizList = new Array();
+	parsedJson.set.forEach(element => { //List is in set property
+		quizList.push(new Quiz(element.question, element.answer, element.type))
+	});
+
+}
+
 function buildHtmlQuiz() {
 	var quiz = currentQuiz;
-	var imgSource = "";
+	var imgSource = ""// TODO implement img support`http://localhost:8080/quiz/img/${currentQuiz.imgSource}`;
 	var html =
 	`<!DOCTYPE html>
 	<html>
-		<head> <meta http-equiv="Refresh" content="5">
-		<link rel="stylesheet" href="http://localhost:8080/quiz/css">
+		<head>
+			<meta http-equiv="Refresh" content="5">
+			<link rel="stylesheet" href="http://localhost:8080/quiz/css">
 		</head>
 		<body>
 			<div class="outer-container">
-				<div class="inner-container-top">
+				<div class="inner-container-top pulse">
 					<div class="right">
-						<img src=${imgSource}></img>
+						<img src="${imgSource}"></img>
 					</div>
 					<div class="left">
 					Quiz:
-						<br>
-						<p>${quiz.question}</p>
+						<p>${quiz.question}?</p>
 					</div>
 				</div>
 			</div>
@@ -76,13 +95,15 @@ function buildHtmlQuiz() {
 }
 
 function finishedQuizHtml() {
+	//TODO: consider using <meta http-equiv="Refresh" content="5">
 	var quiz = currentQuiz;
-	var imgSource = "";
-	var html =
+	var imgSource = ""// TODO implement img support`http://localhost:8080/quiz/img/${currentQuiz.imgSource}`;
+	var html =  
 	`<!DOCTYPE html>
 	<html>
-		<head> <meta http-equiv="Refresh" content="5">
-		<link rel="stylesheet" href="http://localhost:8080/quiz/css">
+		<head> 
+			<meta http-equiv="Refresh" content="5">
+			<link rel="stylesheet" href="http://localhost:8080/quiz/css">
 		</head>
 		<body>
 			<div class="outer-container">
@@ -92,13 +113,12 @@ function finishedQuizHtml() {
 					</div>
 					<div class="left">
 					Quiz:
-						<br>
-						<p>${quiz.question}</p>
+						<p>${quiz.question}?</p>
 					</div>
 				</div>
 				<div class="inner-container-bottom">
-					<p>	Resposta: ${quiz.correctAnswer}</p>
-					<p> por:${lastUserToAnswer}	</p>
+					Resposta: ${quiz.correctAnswer}
+					<p>por:${lastUserToAnswer}</p>
 				</div>
 			</div>
 		</body>

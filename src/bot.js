@@ -24,12 +24,13 @@ client.on("chat", (channel, user, message, self) => {
       case "qstart":
         if(isOwnerCommand)
         {
-          var qq = new Quiz(parsedCommand.command, parsedCommand.args.join(' '), "text");
-          quizServer.setQuiz(qq);
+          console.log("//Starting Quiz")
+          quizServer.setRandomQuiz();
         }
         break;
 
       case "e":
+        quizServerStatus = "hidden"
         quizServer.eraseScreen();
         break;
 
@@ -38,12 +39,16 @@ client.on("chat", (channel, user, message, self) => {
     }
   }
   else if(quizServerStatus == 'inProgress') {
-    console.log("")
     if(quizServer.checkAnswer(message, user.username)) {
       var message = `acertou o quiz PogChamp e ganhou ${quizPayout} pelos!`;
       sendTargetChatMessage(user, message);
       message = `!givepoints ${user.username} ${quizPayout}`;
       sendChatMessage(message);
+      setTimeout(function(){ 
+         quizServerStatus = "hidden"
+         quizServer.eraseScreen();
+      }, 5000);
+
     }
   }
 });
