@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 import Quiz from './quiz.js'
 
-
+var port = 8080
 var currentQuiz = undefined
 var status = 'inProgress'
 var lastUserToAnswer = undefined
@@ -13,7 +13,7 @@ module.exports = {
 
 	mountServer: function () {
 		status = 'hidden';
-		app.listen(8080,  function() {
+		app.listen(port,  function() {
 			console.log('app listening on port 8080!');
 		});
 		app.get('/quiz', function(req, res) {
@@ -63,6 +63,9 @@ function loadQuizFiles() {
 	parsedJson.set.forEach(element => { //List is in set property
 		quizList.push(new Quiz(element.question, element.answer, element.type))
 	});
+	quizList.sort(function () {
+		return Math.round(Math.random()) - 0.5
+	})
 
 }
 
