@@ -3,6 +3,7 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 import Quiz from './quiz.js'
+import soundController from "./soundController";
 
 
 var currentQuiz = undefined
@@ -33,6 +34,7 @@ module.exports = {
 		currentQuiz = quiz
 	},
 	setRandomQuiz: function(){
+		console.log("		Starting random quiz")
 		status = 'inProgress';
 		//var randomIndex = Math.floor(Math.random() * this.length);
 		//currentQuiz = quizList[randomIndex];
@@ -98,10 +100,10 @@ function finishedQuizHtml() {
 	//TODO: consider using <meta http-equiv="Refresh" content="5">
 	var quiz = currentQuiz;
 	var imgSource = ""// TODO implement img support`http://localhost:8080/quiz/img/${currentQuiz.imgSource}`;
-	var html =  
+	var html =
 	`<!DOCTYPE html>
 	<html>
-		<head> 
+		<head>
 			<meta http-equiv="Refresh" content="5">
 			<link rel="stylesheet" href="http://localhost:8080/quiz/css">
 		</head>

@@ -7,9 +7,16 @@ import { messageToUser } from "./utils";
 import soundController from "./soundController";
 
 const quizPayout = 1000;
-quizServer.mountServer()
-var quizServerStatus = quizServer.getStatus();
+const MILLISECONDS_TO_MINUTES = 60*1000
+var quizDelay = 30
+var quizInQueue = 0
+
+var lastQuizTimestamp = Date.now()
+
 var greetedList = []
+var quizServerStatus = quizServer.getStatus();
+
+quizServer.mountServer()
 // Commands
 client.on("chat", (channel, user, message, self) => {
   if (self) return; // bot message
@@ -17,23 +24,53 @@ client.on("chat", (channel, user, message, self) => {
 
   var isOwnerCommand = ("#" + user.username == channel);
 
+  // try to greet user
   var res = greetUser(user.username)
+
+  // check if there is a queued quiz
+  if(lastQuizTimestamp + quizDelay*MILLISECONDS_TO_MINUTES < Date.now()) {
+    if(quizInQueue > 0 && quizServerStatus != "inProgress") {
+        console.log("   New random quiz due to timer")
+        quizServer.setRandomQuiz();
+        soundController.playGenericSound("showdomilhao.mp3")
+        quizInQueue--
+        lastQuizTimestamp = Date.now()
+    }
+  }
 
   // if message has symbol whats mean command - !
   if (message.indexOf("!") !== -1) {
     var parsedCommand = resolve(channel, user, message);
     switch(parsedCommand.command)
     {
+
       case "qstart":
         if(isOwnerCommand)
         {
-          console.log("//Starting Quiz")
+          lastQuizTimestamp = Date.now()
+          switch(parsedCommand.args.length)
+          {
+            case 0:
+              quizInQueue = 0
+            case 1:
+              quizInQueue = parseInt(parsedCommand.args[0])
+              break
+            case 2:
+              quizInQueue = parseInt(parsedCommand.args[0])
+              quizDelay = parseInt(parsedCommand.args[1])
+              break
+            default:
+              break
+          }
+          soundController.playGenericSound("perguntashowdomilhao.mp3")
           quizServer.setRandomQuiz();
         }
         break;
 
       case "e":
         quizServerStatus = "hidden"
+        quizDelay = 900
+        quizInQueue = 0
         quizServer.eraseScreen();
         break;
 
@@ -47,10 +84,11 @@ client.on("chat", (channel, user, message, self) => {
       sendTargetChatMessage(user, message);
       message = `!givepoints ${user.username} ${quizPayout}`;
       sendChatMessage(message);
+      soundController.playGenericSound("correct.mp3")
       setTimeout(function(){
          quizServerStatus = "hidden"
          quizServer.eraseScreen();
-      }, 5000);
+      }, 10000);
 
     }
   }
