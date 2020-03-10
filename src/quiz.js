@@ -1,9 +1,9 @@
 export default class Quiz {
-	constructor(_question, _correctAnswer, _type) {
+	constructor(_question, _correctAnswer, _type, _imagePath) {
 		this.question = _question
 		this.correctAnswer = _correctAnswer
 		this.type = _type
-		this.imgPath = ""
+		this.imgPath = _imagePath
 	}
 
 	isAnswerCorrect(answer){

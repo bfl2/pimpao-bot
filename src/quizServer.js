@@ -8,6 +8,7 @@ import soundController from "./soundController";
 var port = 8080
 var currentQuiz = undefined
 var status = 'inProgress'
+const quizPath = "../quiz-files/quiz1.json"
 var lastUserToAnswer = undefined
 var quizList = undefined
 module.exports = {
@@ -59,11 +60,11 @@ module.exports = {
 }
 
 function loadQuizFiles() {
-	var rawJson = fs.readFileSync(path.resolve(__dirname, "../quiz-files/quizset.json")).toString();
+	var rawJson = fs.readFileSync(path.resolve(__dirname, quizPath)).toString();
 	var parsedJson = JSON.parse(rawJson)
 	quizList = new Array();
 	parsedJson.set.forEach(element => { //List is in set property
-		quizList.push(new Quiz(element.question, element.answer, element.type))
+		quizList.push(new Quiz(element.question, element.answer, element.type, element.image))
 	});
 	quizList.sort(function () {
 		return Math.round(Math.random()) - 0.5
@@ -73,7 +74,7 @@ function loadQuizFiles() {
 
 function buildHtmlQuiz() {
 	var quiz = currentQuiz;
-	var imgSource = ""// TODO implement img support`http://localhost:8080/quiz/img/${currentQuiz.imgSource}`;
+	var imgSource = currentQuiz.imgPath == undefined ? "":currentQuiz.imgPath
 	var html =
 	`<!DOCTYPE html>
 	<html>
@@ -84,12 +85,13 @@ function buildHtmlQuiz() {
 		<body>
 			<div class="outer-container">
 				<div class="inner-container-top pulse">
-					<div class="right">
-						<img src="${imgSource}"></img>
-					</div>
 					<div class="left">
 					Quiz:
 						<p>${quiz.question}?</p>
+					</div>
+					<div class="middle-div"><div>
+					<div class="right">
+						<img src="${imgSource}"></img>
 					</div>
 				</div>
 			</div>
@@ -100,9 +102,8 @@ function buildHtmlQuiz() {
 }
 
 function finishedQuizHtml() {
-	//TODO: consider using <meta http-equiv="Refresh" content="5">
 	var quiz = currentQuiz;
-	var imgSource = ""// TODO implement img support`http://localhost:8080/quiz/img/${currentQuiz.imgSource}`;
+	var imgSource = currentQuiz.imgPath == undefined ? "":currentQuiz.imgPath
 	var html =
 	`<!DOCTYPE html>
 	<html>
@@ -113,16 +114,18 @@ function finishedQuizHtml() {
 		<body>
 			<div class="outer-container">
 				<div class="inner-container-top">
-					<div class="right">
-						<img src=${imgSource}></img>
-					</div>
 					<div class="left">
-					Quiz:
-						<p>${quiz.question}?</p>
+						Quiz:
+							<p>${quiz.question}?</p>
+					</div>
+					<div class="middle-div"><div>
+					<div class="right">
+						<img src="${imgSource}"></img>
 					</div>
 				</div>
+
 				<div class="inner-container-bottom">
-					Resposta: ${quiz.correctAnswer}
+					<p>Resposta: ${quiz.correctAnswer}</p>
 					<p>por:${lastUserToAnswer}</p>
 				</div>
 			</div>
