@@ -3,7 +3,6 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 import Quiz from './quiz.js'
-import soundController from "./soundController";
 
 var port = 8080
 var currentQuiz = undefined

@@ -4,7 +4,6 @@ client.connect();
 import quizServer from "./quizServer";
 import Quiz from './quiz.js'
 import { messageToUser } from "./utils";
-import soundController from "./soundController";
 
 const quizPayout = 1000;
 const MILLISECONDS_TO_MINUTES = 60*1000
@@ -25,14 +24,13 @@ client.on("chat", (channel, user, message, self) => {
   var isOwnerCommand = ("#" + user.username == channel);
 
   // try to greet user
-  var res = greetUser(user.username)
+  // var res = greetUser(user.username)
 
   // check if there is a queued quiz
   if(lastQuizTimestamp + quizDelay*MILLISECONDS_TO_MINUTES < Date.now()) {
     if(quizInQueue > 0 && quizServerStatus != "inProgress") {
         console.log("   New random quiz due to timer")
         quizServer.setRandomQuiz();
-        soundController.playGenericSound("showdomilhao.mp3")
         quizInQueue--
         lastQuizTimestamp = Date.now()
     }
@@ -62,7 +60,6 @@ client.on("chat", (channel, user, message, self) => {
             default:
               break
           }
-          soundController.playGenericSound("perguntashowdomilhao.mp3")
           quizServer.setRandomQuiz();
         }
         break;
@@ -84,7 +81,6 @@ client.on("chat", (channel, user, message, self) => {
       sendTargetChatMessage(user, message);
       message = `!givepoints ${user.username} ${quizPayout}`;
       sendChatMessage(message);
-      soundController.playGenericSound("correct.mp3")
       setTimeout(function(){
          quizServerStatus = "hidden"
          quizServer.eraseScreen();
@@ -104,7 +100,7 @@ function sendChatMessage(message) {
 
 function greetUser(username) {
   if(!greetedList.includes(username)) {
-    var res = soundController.playUserGreeting(username)
+    //TODO insert call to sound api
     if(res == 'done')
       greetedList.push(username)
   }
