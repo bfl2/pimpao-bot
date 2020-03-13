@@ -30,5 +30,5 @@ channel: "your-channel-here"
 5. Run bot `npm start`
 
 ``
-## Thanks for devkucher for providing the base template for this bot
+## Thanks to devkucher for providing the base template for this bot
 
