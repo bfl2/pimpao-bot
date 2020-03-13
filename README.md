@@ -1,5 +1,5 @@
 # Quizzy Twitch Bot
-# Extension from Twitch Bot boilerplate(https://twitch.tv/devkucher)
+# Extension from Twitch Bot boilerplate
 
 "Ready to go" boilerplate with Jest, TMI.js, Nodemon, Config, Babel.
 
@@ -30,5 +30,5 @@ channel: "your-channel-here"
 5. Run bot `npm start`
 
 ``
-## Thanks to devkucher for providing the base template for this bot
+## Thanks to devkucher(https://twitch.tv/devkucher) for providing the base template for this bot
 
