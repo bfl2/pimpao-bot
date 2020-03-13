@@ -1,4 +1,5 @@
-# Twitch Bot boilerplate
+# Quizzy Twitch Bot
+# Extension from Twitch Bot boilerplate(https://twitch.tv/devkucher)
 
 "Ready to go" boilerplate with Jest, TMI.js, Nodemon, Config, Babel.
 
@@ -28,46 +29,6 @@ channel: "your-channel-here"
 
 5. Run bot `npm start`
 
-## Utils
+``
+## Thanks for devkucher for providing the base template for this bot
 
-**Check if user moderator**
-
-```js
-import { isModerator } from "./utils";
-
-// You can get info about user from incoming message
-const user = messageInfo.user;
-
-if (isModerator(user)) {
-  console.log(`${user.username} is moderate this channel`);
-}
-```
-
-**Send message to user**
-
-```js
-import { messageToUser } from "./utils";
-
-// You can get info about user from incoming message
-const user = messageInfo.user;
-
-const message = ", thanks for follow dude";
-
-messageToUser(user.username, message);
-
-// In chat:
-// your_bot: @devkucher, thanks for follow dude
-```
-
-## Contributing
-
-If you have any comments or ideas - goto new issue.
-
-## Get in touch
-
-- Twitch [@devkucher](https://twitch.tv/devkucher)
-- Me on Medium [@KucherDev](https://medium.com/@KucherDev)
-- Follow [@KucherDev on Twitter](https://twitter.com/KucherDev)
-- Have a questions? [My telegram](https://t.me/qWici)
-
-## Have a fun :blush:
