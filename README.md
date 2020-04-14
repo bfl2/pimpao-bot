@@ -27,7 +27,6 @@ channel: "your-channel-here"
 
 5. Run bot `npm start`
 
-``
 6. Setup Browser Sources
   ` Quiz module at
   http://localhost:8080/quiz
