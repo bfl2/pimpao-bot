@@ -1,7 +1,5 @@
-# Quizzy Twitch Bot
-# Extension from Twitch Bot boilerplate
-
-"Ready to go" boilerplate with Jest, TMI.js, Nodemon, Config, Babel.
+# Pimpao Bot
+# Simple twitch bot with additional functionalities such as Quiz and Queue System.
 
 ## Install
 
@@ -30,5 +28,14 @@ channel: "your-channel-here"
 5. Run bot `npm start`
 
 ``
+6. Setup Browser Sources
+  ` Quiz module at
+  http://localhost:8080/quiz
+  `
+` Queue module at
+http://localhost:8000/queue
+`
 ## Thanks to devkucher(https://twitch.tv/devkucher) for providing the base template for this bot
+
+## Contact me at ursope(https://twitch.tv/ursope) if you need any help setting up this bot
 
