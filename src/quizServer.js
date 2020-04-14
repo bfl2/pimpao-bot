@@ -7,9 +7,10 @@ import Quiz from './quiz.js'
 var port = 8080
 var currentQuiz = undefined
 var status = 'inProgress'
-const quizPath = "../quiz-files/quiz1.json"
+const quizPath = "../quiz-files/quizset.json"
 var lastUserToAnswer = undefined
 var quizList = undefined
+
 module.exports = {
 
 	mountServer: function () {
@@ -134,19 +135,6 @@ function finishedQuizHtml() {
 	return html
 }
 
-function fooHtml() {
-	var header = `
-	<!DOCTYPE html>
-	<head> <meta http-equiv="Refresh" content="5">
-	<link rel="stylesheet" href="http://localhost:8080/quiz/css">
-	</head>
-	`
-	var content = new Date().toUTCString();
-	var body = '<br><br> <body>' + content + '</body>'
-
-	var html = '<html>' + header + body + '</html>';
-	return html
-}
 function emptyHtml() {
 	var header = `
 	<!DOCTYPE html>
