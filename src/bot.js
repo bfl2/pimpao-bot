@@ -23,6 +23,7 @@ quizServer.mountServer()
 
 var playerQueue = []
 var queueServerStatus = "open"
+const ID_LIMIT = 40
 
 queueServer.mountServer()
 
@@ -119,7 +120,7 @@ client.on("chat", (channel, user, message, self) => {
 				switch(parsedCommand.args.length)
 				{
 					case 1:
-						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, 15).replace(["<",">","/"], 0))
+						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, ID_LIMIT).replace(["<",">","/"], 0))
 						if(res > 0)
 						{
 							sendTargetChatMessage(user, `added to queue`)
