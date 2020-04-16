@@ -83,9 +83,6 @@ client.on("chat", (channel, user, message, self) => {
 					quizServer.eraseScreen()
 					break
 
-				default:
-					break
-
 				// Join queue commands
 				case "fopen":
 					console.log("Queue opened")
@@ -103,12 +100,30 @@ client.on("chat", (channel, user, message, self) => {
 							break
 					}
 					queueServer.cullPlayerList(elements)
-					console.log(`Remove the top ${elements} players from the list`)
+					console.log(`Removed the top ${elements} players from the list`)
+					break
+
+				case "fskip":
+					switch(parsedCommand.args.length)
+					{
+						case 1:
+							var index = parseInt(parsedCommand.args[0])
+							queueServer.removePlayer(index - 1)
+							console.log(`Removed player at position ${index}`)
+							break
+						default:
+							console.log("Wrong parameters")
+							break
+					}
 					break
 
 				case "fclose":
 					queueServer.closeQueue()
 					sendChatMessage("Queue closed")
+					break
+
+				default:
+					console.log("Command not recognized")
 					break
 			}
 		}
@@ -123,7 +138,7 @@ client.on("chat", (channel, user, message, self) => {
 						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, ID_LIMIT).replace(["<",">","/"], 0))
 						if(res > 0)
 						{
-							sendTargetChatMessage(user, `added to queue`)
+							sendTargetChatMessage(user.username, `added to queue`)
 						}
 						break
 					default:
@@ -132,14 +147,40 @@ client.on("chat", (channel, user, message, self) => {
 						break
 				}
 				break;
+
+			case "pos":
+				var pos = queueServer.getPosByName(user.username)
+				if (pos >= 0)
+				{
+					sendTargetChatMessage(user.username, ` Your position at queue is #${pos+1}`)
+				}
+				else
+				{
+					sendTargetChatMessage(user.username, `You are not in queue!`)
+				}
+				break
+
+			case "sair": //alias for exit command
+			case "exit":
+				var pos = queueServer.getPosByName(user.username)
+				if (pos >= 0)
+				{
+					var res = queueServer.removePlayer(pos)
+					if (res)
+					{
+						sendTargetChatMessage(user.username, `Successfully exited queue`)
+					}
+				}
+
+				break
 		}
 	}
-	else if(quizServerStatus == 'inProgress')
+	else if(quizServerStatus == 'inProgress') // Quiz answer check logic
 	{
 		if(quizServer.checkAnswer(message, user.username))
 		{
 			var message = `acertou o quiz PogChamp e ganhou ${quizPayout} pelos!`;
-			sendTargetChatMessage(user, message);
+			sendTargetChatMessage(user.username, message);
 			message = `!givepoints ${user.username} ${quizPayout}`;
 			sendChatMessage(message);
 			setTimeout(function(){
@@ -151,9 +192,14 @@ client.on("chat", (channel, user, message, self) => {
 	}
 });
 
-function sendTargetChatMessage(user, message)
+function sendTargetChatMessage(username, message)
 {
-	client.action(client.activeChannel, `@${user.username} ${message}`);
+	client.action(client.activeChannel, `@${username} ${message}`);
+}
+
+function sendPrivateMessage(username, message)
+{
+	client.whisper(username, message)//Currently not working on a non verified bot account
 }
 
 function sendChatMessage(message)

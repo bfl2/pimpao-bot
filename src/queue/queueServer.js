@@ -67,18 +67,9 @@ module.exports = {
 		console.log(queuel)
 		return len
 	},
-	getPlayerList: function(len, isRemove = true)
+	getPosByName: function(playerName)
 	{
-		if (isRemove)
-		{
-			return queuel.slice(0, len)
-		}
-		else
-		{
-			var top = queuel.slice(0, len)
-			queuel = top.concat(queue)
-			return top
-		}
+		return getPlayerPos(playerName)
 	},
 	getFullQueue: function()
 	{
@@ -88,10 +79,27 @@ module.exports = {
 	{
 		status = "hidden"
 	},
-	cullPlayerList(len)
+	cullPlayerList: function(len)
 	{
 		return removePlayers(len)
+	},
+	removePlayer: function(pos)
+	{
+		return removePlayerAtPosition(pos)
 	}
+}
+
+function getPlayerPos(playerName)
+{
+	for (var i = 0; i < queuel.length; i++)
+	{
+		var player = queuel[i]
+		if (player.name == playerName)
+		{
+			return i
+		}
+	}
+	return -1
 }
 
 function addPlayer(playerName, playerId)
@@ -113,6 +121,16 @@ function removePlayers(len)
 	return queuel.length - limitedLen
 }
 
+function removePlayerAtPosition(pos)
+{
+	if(pos >= 0 && pos <= queuel.length)
+	{
+		queuel.splice(pos, 1)
+		return true
+	}
+	return false
+}
+
 function getFormattedPlayerList(playersLimit, playersHighlightLimit = 10)
 {
 	var playerList = ""
@@ -120,9 +138,6 @@ function getFormattedPlayerList(playersLimit, playersHighlightLimit = 10)
 	for ( var i =0; i< queuel.length; i++)
 	{
 		var player = queuel[i]
-		console.log(player)
-
-		var modifier = (i < playersHighlightLimit)? "queuehg":""
 
 		var playerElementTemplate =`<tr>
 <th scope="row">${i+1}</th>
@@ -155,11 +170,10 @@ function openQueueHtml()
 		</head>
 		<body>
 		<div class="queue">
-			${openQueueTxt}
+
 		<button class="btn btn-success float-sm-left" type="button" disabled>
 		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-		Fila Aberta
-
+			${openQueueTxt}
 		</button>
 			<table class="table table-striped table-dark">
 			<thead>
