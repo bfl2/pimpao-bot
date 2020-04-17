@@ -135,7 +135,7 @@ client.on("chat", (channel, user, message, self) => {
 				switch(parsedCommand.args.length)
 				{
 					case 1:
-						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, ID_LIMIT).replace(["<",">","/"], 0))
+						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, ID_LIMIT).replace(["<",">","/"], 0), user.subscriber)
 						if(res > 0)
 						{
 							sendTargetChatMessage(user.username, `added to queue`)

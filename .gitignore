@@ -2,6 +2,8 @@
 Thumbs.db
 ehthumbs.db
 
+# Configuration Files
+*src/queue/config.json
 # Folder config file
 Desktop.ini
 
