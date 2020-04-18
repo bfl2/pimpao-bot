@@ -123,7 +123,6 @@ client.on("chat", (channel, user, message, self) => {
 					break
 
 				default:
-					console.log("Command not recognized")
 					break
 			}
 		}

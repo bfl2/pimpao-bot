@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 
 var port = 8000
-var queuel = []
+var queuel = [{name:"1", id:"123123", subscriber:true}, {name:"2", id:"123123", subscriber:true}, {name:"3", id:"123123", subscriber:true}, {name:"asdasd", id:"123123", subscriber:false}, {name:"as", id:"123123", subscriber:false}]
 var status = 'closed'
 
 
@@ -12,8 +12,6 @@ var status = 'closed'
 
 var content = fs.readFileSync(__dirname+"/config.json");
 var config = JSON.parse(content);
-console.log("Config file:")
-console.log(config)
 var subHasPreference = config.SubHasPreference
 
 const openQueueText = config.OpenQueueText
@@ -94,7 +92,7 @@ function addPlayer(playerName, playerId, isSub)
 	var len = 0
 	var prefPos = 0
 	var found = false
-	var player = {"name":playerName, "id":playerId, "subscriber":isSub}
+	var player = {name:playerName, id:playerId, subscriber:isSub}
 	if (status == "open")
 	{
 		for (var i = 0; i < queuel.length; i++)
@@ -105,24 +103,23 @@ function addPlayer(playerName, playerId, isSub)
 				found = true
 				break
 			}
-			else if (player.isSub && !queuel[i].subscriber) // check for preferential position to insert
+			else if (player.subscriber && !queuel[i].subscriber) // check for preferential position to insert
 			{
 				prefPos = i
 				break
 			}
 		}
-		if (!found)
+
+		if(isSub && !found)
 		{
-			len = addPlayer(playerName, playerId, isSub)
-			var len = queuel.push(player)
+			return insertAtPos(prefPos, player)
 		}
-		else if(isSub)
+		else
 		{
-			return insertAtPos(playerName, playerId, isSub)
+			len = queuel.push(player)
+			return len
 		}
 	}
-
-	return len
 }
 
 function editPlayer(index, updatedId)
@@ -160,10 +157,11 @@ function getFormattedPlayerList(playersLimit, playersHighlightLimit = 10)
 	for ( var i =0; i< queuel.length; i++)
 	{
 		var player = queuel[i]
+		var preferenceMarker = player.subscriber? "☆":""
 
 		var playerElementTemplate =`<tr>
 <th scope="row">${i+1}</th>
-<td>${player.name}</td>
+<td>${preferenceMarker}${player.name}</td>
 <td>${player.id}</td>
 </tr>
 `
