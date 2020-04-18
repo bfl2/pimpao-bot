@@ -7,11 +7,15 @@ var port = 8000
 var queuel = []
 var status = 'closed'
 
-// Text
 
-const openQueueTxt = "Fila Aberta"
-const closedQueueTxt = "Fila Fechada"
+// Config File
 
+var content = fs.readFileSync(__dirname+"/config.json");
+var config = JSON.parse(content);
+var subHasPreference = config.SubHasPreference
+
+const openQueueText = config.OpenQueueText
+const closedQueueText = config.ClosedQueueText
 module.exports = {
 
 	mountServer: function ()
@@ -44,28 +48,9 @@ module.exports = {
 	{
 		return status
 	},
-	addToQueue: function(playerName, playerId)
+	addToQueue: function(playerName, playerId, isSub)
 	{
-		var len = 0
-		var found = false
-		if (status == "open")
-		{
-			for (var i = 0; i < queuel.length; i++)
-			{
-				if (queuel[i].name == playerName)
-				{
-					editPlayer(i, playerId) // Update Id
-					found = true
-					break
-				}
-			}
-			if (!found)
-			{
-				len = addPlayer(playerName, playerId)
-			}
-		}
-		console.log(queuel)
-		return len
+		return addPlayer(playerName, playerId, isSub)
 	},
 	getPosByName: function(playerName)
 	{
@@ -102,16 +87,50 @@ function getPlayerPos(playerName)
 	return -1
 }
 
-function addPlayer(playerName, playerId)
+function addPlayer(playerName, playerId, isSub)
 {
-	var player = {"name":playerName, "id":playerId}
-	var len = queuel.push(player)
-	return len
+	var len = 0
+	var prefPos = 0
+	var found = false
+	var player = {name:playerName, id:playerId, subscriber:isSub}
+	if (status == "open")
+	{
+		for (var i = 0; i < queuel.length; i++)
+		{
+			if (queuel[i].name == player.name)
+			{
+				editPlayer(i, player.id) // Update Id
+				found = true
+				break
+			}
+			else if (player.subscriber && !queuel[i].subscriber) // check for preferential position to insert
+			{
+				prefPos = i
+				break
+			}
+		}
+
+		if(isSub && !found)
+		{
+			return insertAtPos(prefPos, player)
+		}
+		else
+		{
+			len = queuel.push(player)
+			return len
+		}
+	}
 }
 
 function editPlayer(index, updatedId)
 {
 	queuel[index].id = updatedId
+}
+
+function insertAtPos(index, playerObj)
+{
+	queuel.splice(index, 0, playerObj)
+	return index
 }
 
 function removePlayers(len)
@@ -138,10 +157,11 @@ function getFormattedPlayerList(playersLimit, playersHighlightLimit = 10)
 	for ( var i =0; i< queuel.length; i++)
 	{
 		var player = queuel[i]
+		var preferenceMarker = player.subscriber? "☆":""
 
 		var playerElementTemplate =`<tr>
 <th scope="row">${i+1}</th>
-<td>${player.name}</td>
+<td>${preferenceMarker}${player.name}</td>
 <td>${player.id}</td>
 </tr>
 `
@@ -173,7 +193,7 @@ function openQueueHtml()
 
 		<button class="btn btn-success float-sm-left" type="button" disabled>
 		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-			${openQueueTxt}
+			${openQueueText}
 		</button>
 			<table class="table table-striped table-dark">
 			<thead>
@@ -211,7 +231,7 @@ function closedQueueHtml()
 		<div class="queue">
 
 		<button class="btn btn-danger float-sm-left" type="button" disabled>
-			${closedQueueTxt}
+			${closedQueueText}
 		</button>
 			<table class="table table-striped table-dark">
 			<thead>
