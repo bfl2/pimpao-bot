@@ -101,24 +101,19 @@ function addPlayer(playerName, playerId, isSub)
 			{
 				editPlayer(i, player.id) // Update Id
 				found = true
-				break
+				return i
 			}
 			else if (player.subscriber && !queuel[i].subscriber) // check for preferential position to insert
 			{
 				prefPos = i
-				break
+				return insertAtPos(prefPos, player)
 			}
 		}
-
-		if(isSub && !found)
-		{
-			return insertAtPos(prefPos, player)
-		}
-		else
+		if (!found)
 		{
 			len = queuel.push(player)
-			return len
 		}
+		return len
 	}
 }
 
