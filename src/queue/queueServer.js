@@ -3,24 +3,26 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
-var port = 8000
 var queuel = []
-var status = 'closed'
 
 
 // Config File
 
 var content = fs.readFileSync(__dirname+"/config.json");
 var config = JSON.parse(content);
+var port = config.Port
+var status = config.ServerInitialStatus;
+
 var subHasPreference = config.SubHasPreference
 
 const openQueueText = config.OpenQueueText
 const closedQueueText = config.ClosedQueueText
+const idColumnText = config.IdColumnText
+
 module.exports = {
 
 	mountServer: function ()
 	{
-		status = 'closed';
 		queuel = new Array()
 		app.listen(port, function() {
 			console.log(`app listening on port ${port}!`)
@@ -103,7 +105,7 @@ function addPlayer(playerName, playerId, isSub)
 				found = true
 				return i
 			}
-			else if (player.subscriber && !queuel[i].subscriber) // check for preferential position to insert
+			else if (player.subscriber && !queuel[i].subscriber && subHasPreference) // check for preferential position to insert
 			{
 				prefPos = i
 				return insertAtPos(prefPos, player)
@@ -195,7 +197,7 @@ function openQueueHtml()
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">Twitch</th>
-				<th scope="col">Dota id</th>
+				<th scope="col">${idColumnText}</th>
 			</tr>
 			</thead>
 			<tbody>
