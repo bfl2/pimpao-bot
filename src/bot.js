@@ -52,6 +52,7 @@ client.on("chat", (channel, user, message, self) => {
 	if (message.indexOf("!") !== -1)
 	{
 		var parsedCommand = resolve(channel, user, message);
+		var isUserFounder = user.hasOwnProperty('founder')
 		if(isOwnerCommand) // Restricted to channel owner commands, this could be expanded to moderators in the future
 		{
 			switch(parsedCommand.command)
@@ -131,18 +132,18 @@ client.on("chat", (channel, user, message, self) => {
 		{
 			case "fila":// Alias for join command
 			case "join":
+				var treatedId = parseIdPayload(parsedCommand)
 				switch(parsedCommand.args.length)
 				{
 					case 1:
-						var res = queueServer.addToQueue(user.username, parsedCommand.args[0].slice(0, ID_LIMIT).replace(["<",">","/"], 0), user.subscriber)
+						var res = queueServer.addToQueue(user.username, treatedId, user.subscriber||isUserFounder)
 						if(res > 0)
 						{
 							sendTargetChatMessage(user.username, `added to queue`)
 						}
 						break
 					default:
-						console.log("Wrong parameters")
-						// Warn user to provide correct dota Id
+						//For now, ignore command with multiple parameters
 						break
 				}
 				break;
@@ -190,6 +191,11 @@ client.on("chat", (channel, user, message, self) => {
 		}
 	}
 });
+
+function parseIdPayload(parsedCommand)
+{
+	return parsedCommand.args.join(" ").slice(0, ID_LIMIT).replace(["<",">","/","\\"], "")
+}
 
 function sendTargetChatMessage(username, message)
 {
