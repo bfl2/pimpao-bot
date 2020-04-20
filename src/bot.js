@@ -51,8 +51,12 @@ client.on("chat", (channel, user, message, self) => {
 	// if message has symbol whats mean command - !
 	if (message.indexOf("!") !== -1)
 	{
+		var isUserFounder = false
 		var parsedCommand = resolve(channel, user, message);
-		var isUserFounder = user.badges.hasOwnProperty('founder')
+		if (user.badges != undefined)
+		{
+			var isUserFounder = user.badges.hasOwnProperty('founder')
+		}
 		if(isOwnerCommand) // Restricted to channel owner commands, this could be expanded to moderators in the future
 		{
 			switch(parsedCommand.command)
