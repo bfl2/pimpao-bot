@@ -52,7 +52,7 @@ client.on("chat", (channel, user, message, self) => {
 	if (message.indexOf("!") !== -1)
 	{
 		var parsedCommand = resolve(channel, user, message);
-		var isUserFounder = user.hasOwnProperty('founder')
+		var isUserFounder = user.badges.hasOwnProperty('founder')
 		if(isOwnerCommand) // Restricted to channel owner commands, this could be expanded to moderators in the future
 		{
 			switch(parsedCommand.command)
