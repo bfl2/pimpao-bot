@@ -37,9 +37,9 @@ module.exports = {
 	setRandomQuiz: function(){
 		console.log("		Starting random quiz")
 		status = 'inProgress';
-		//var randomIndex = Math.floor(Math.random() * this.length);
-		//currentQuiz = quizList[randomIndex];
-		//quizList.splice(randomIndex, 1);
+		var randomIndex = Math.floor(Math.random() * this.length);
+		currentQuiz = quizList[randomIndex];
+		quizList.splice(randomIndex, 1);
 		currentQuiz = quizList.pop()//
 	},
 
