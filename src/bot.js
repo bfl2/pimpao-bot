@@ -4,6 +4,7 @@ client.connect();
 import quizServer from "./quizServer";
 import Quiz from './quiz.js'
 import queueServer from "./queue/queueServer.js"
+import greetServer from "./greet/greetServer.js"
 import { messageToUser } from "./utils";
 
 // Quiz Variables
@@ -26,7 +27,7 @@ var queueServerStatus = "open"
 const ID_LIMIT = 40
 
 queueServer.mountServer()
-
+greetServer.mountServer()
 // Commands
 client.on("chat", (channel, user, message, self) => {
 	if (self) return; // bot message
@@ -47,6 +48,9 @@ client.on("chat", (channel, user, message, self) => {
 
 	//Queue checks
 	queueServerStatus = queueServer.getStatus()
+
+	//Greet checks
+	greetServer.tickServer(user.username)
 
 	// if message has symbol whats mean command - !
 	if (message.indexOf("!") !== -1)
@@ -216,13 +220,5 @@ function sendChatMessage(message)
 	client.action(client.activeChannel, `${message}`);
 }
 
-function greetUser(username)
-{
-	if(!greetedList.includes(username))
-	{
-		//TODO insert call to sound api
-		if(res == 'done')
-			greetedList.push(username)
-	}
-}
+
 
