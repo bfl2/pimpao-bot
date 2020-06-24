@@ -50,7 +50,12 @@ client.on("chat", (channel, user, message, self) => {
 	queueServerStatus = queueServer.getStatus()
 
 	//Greet checks
-	greetServer.tickServer(user.username)
+	if(user.username == undefined)
+	{
+		console.log("\tdeu merda aqui(user.username undefined)")
+	}else {
+		greetServer.tickServer(user.username)
+	}
 
 	// if message has symbol whats mean command - !
 	if (message.indexOf("!") !== -1)

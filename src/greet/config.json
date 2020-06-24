@@ -1,0 +1,6 @@
+{
+	"ServerInitialStatus":"idle",
+	"Port":"8090",
+	"GreetCooldown":30,
+	"GreetTextTemplates" : ["Ei @<user>, Olha a pedra!", "Boa noite <user>!", "Olha esse tal de <user> por aqui"]
+}
