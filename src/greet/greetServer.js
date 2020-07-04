@@ -27,7 +27,7 @@ var serverStatus = config.ServerInitialStatus
 const cooldownInMilisecondsForGreet = parseInt(config.GreetCooldown) * 1000
 var greetTextTemplates = config.GreetTextTemplates
 
-const greetDuration = 10
+const greetDuration = 15
 var lastGreetedUser = undefined
 
 module.exports = {
@@ -40,17 +40,16 @@ module.exports = {
 			buildHtml()
 			res.sendFile(__dirname+"/index.html");
 		});
-		app.get('/queue/css', (req, res) => {
+		app.get('/greet/css', (req, res) => {
 			res.sendFile(__dirname+"/style.css");
 		});
-		app.get('/queue/bootstrap', (req, res) => {
+		app.get('/greet/bootstrap', (req, res) => {
 			res.sendFile(__dirname+"/bootstrap.min.css");
 		});
 		loadGreetedList()
-		greetUserWithSound("correct")
 	},
 
-	tickServer: function(username = null) {
+	tickServer: function(username) {
 		if(serverStatus != "closed") {
 			if(username != null && username != undefined) {
 				this.addToGreetQueue(username)
@@ -60,14 +59,17 @@ module.exports = {
 	},
 
 	toggleServer: function() {
-		if(serverStatus == "open") {
-			serverStatus = "closed"
-		} else {
+		if(serverStatus == "closed") {
 			serverStatus = "open"
+		} else {
+			serverStatus = "closed"
 		}
 	},
 
 	addToGreetQueue: function(username) {
+		if(username == undefined) {
+			return
+		}
 		var userAlreadyInList = toGreetList.includes(username) || greetedList.includes(username)
 		if(userAlreadyInList) {
 			return
@@ -84,11 +86,18 @@ module.exports = {
 	},
 }
 
-function greetUserWithSound(userToGreet = null) {
+function greetUserWithSound() {
 	var currentTime = Date.now()
-	if(userToGreet == null) {
+	var userToGreet = undefined
+	if (toGreetList.length == 0) {
+		return false
+	} else {
 		userToGreet = toGreetList.shift()
+		if(userToGreet == undefined) {
+			return false
+		}
 	}
+
 	if(!greetedList.includes(userToGreet)) {
 		var userSoundFilename = getUserGreetingSoundFilename(userToGreet)
 		if(userSoundFilename != null) {
@@ -206,7 +215,7 @@ function buildHtml()
 
 function getGreetText(username)
 {
-	console.log("getGreetText("+username)
+	console.log("getGreetText="+username)
 	if(username == undefined)
 	{
 		console.log("Error getGreetText")
@@ -230,9 +239,9 @@ function greetHTML()
 	`<!DOCTYPE html>
 	<html>
 		<head>
-			<meta http-equiv="Refresh" content="15">
-			<link rel="stylesheet" href="http://localhost:${port}/queue/bootstrap">
-			<link rel="stylesheet" href="http://localhost:${port}/queue/css">
+			<meta http-equiv="Refresh" content="10">
+			<link rel="stylesheet" href="http://localhost:${port}/greet/bootstrap">
+			<link rel="stylesheet" href="http://localhost:${port}/greet/css">
 		</head>
 		<body>
 			<blockquote class="speech bubble">${bubbleText}</blockquote>
@@ -249,7 +258,7 @@ function emptyHtml()
 	<html>
 		<head>
 			<meta http-equiv="Refresh" content="5">
-			<link rel="stylesheet" href="http://localhost:${port}/queue/css">
+			<link rel="stylesheet" href="http://localhost:${port}/greet/css">
 		</head>
 		<body>
 			<div>

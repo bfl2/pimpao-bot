@@ -68,6 +68,7 @@ background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/speech-bubble.
 width: 25%;
 padding-top: 6%;
 padding-bottom: 20%;
+font-size: 30px;
 }
 blockquote.whisper {
 background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/whisper.svg);

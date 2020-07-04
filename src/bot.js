@@ -52,7 +52,7 @@ client.on("chat", (channel, user, message, self) => {
 	//Greet checks
 	if(user.username == undefined)
 	{
-		console.log("\tdeu merda aqui(user.username undefined)")
+		console.log("##undefined user")
 	}else {
 		greetServer.tickServer(user.username)
 	}
