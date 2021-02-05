@@ -1,8 +1,0 @@
-{
-	"SubHasPreference":true,
-	"ServerInitialStatus":"open",
-	"Port":"8000",
-	"OpenQueueText":"Fila Aberta",
-	"ClosedQueueText":"Fila Fechada",
-	"IdColumnText":"id"
-}
