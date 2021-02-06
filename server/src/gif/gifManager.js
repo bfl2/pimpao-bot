@@ -1,10 +1,9 @@
 const fs = require('fs');
-//require("../../resources/data/gifs/")
 
 
 // Load content from gif list file
 
-var gifListfilepath = __dirname+"\\..\\..\\..\\data\\gifs\\userGifs.json"
+var gifListfilepath = __dirname+"\\..\\..\\resources\\data\\gifs\\userGifs.data"
 if (!fs.existsSync(gifListfilepath)) { // create empty file if it does not exist
 	fs.writeFileSync(gifListfilepath, "")
 }

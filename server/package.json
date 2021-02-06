@@ -4,8 +4,9 @@
   "description": "Twitch Bot starter templater",
   "main": "src/bot.js",
   "nodemonConfig": {
-    "ignore": ["*.json", "resources/data/gifs/userGifs.json"],
-    "delay": "2" },
+    "verbose": true,
+    "ignore": "./resources\\*"
+  },
   "scripts": {
     "start": "nodemon --exec babel-node src/bot.js --ignore '*.json'",
     "test": "jest --silent --coverage"
